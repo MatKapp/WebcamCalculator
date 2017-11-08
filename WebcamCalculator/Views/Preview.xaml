@@ -13,7 +13,9 @@
             <WindowsFormsHost.Child>
                 <motionDetection:Form1 TopLevel="False"/>
             </WindowsFormsHost.Child>
+            
         </WindowsFormsHost>
         
+               
     </Grid>
 </UserControl>
