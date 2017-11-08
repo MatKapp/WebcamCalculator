@@ -18,6 +18,7 @@ using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 using FeatureMatchingExample;
+using WebcamCalculator.Model;
 
 namespace MotionDetection
 {
@@ -26,6 +27,7 @@ namespace MotionDetection
         private VideoCapture _capture;
         private MotionHistory _motionHistory;
         private BackgroundSubtractor _forgroundDetector;
+        private TemplateContainer templateContainer = new TemplateContainer();
 
         public Form1()
         {
@@ -129,7 +131,9 @@ namespace MotionDetection
                 return;
 
             capturedImageBox.Image = image;
-            forgroundImageBox.Image = _forgroundMask;
+            forgroundImageBox.Image = image;
+
+            BriskController.GetText(templateContainer, image);
 
             //Display the amount of motions found on the current image
             UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", rects.Length, overallMotionPixelCount));
