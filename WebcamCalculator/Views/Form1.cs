@@ -28,6 +28,8 @@ namespace MotionDetection
         private MotionHistory _motionHistory;
         private BackgroundSubtractor _forgroundDetector;
         private TemplateContainer templateContainer = new TemplateContainer();
+        private Mat modelImage1 = CvInvoke.Imread("Images/box.png", ImreadModes.Grayscale);
+        private Mat modelImage2 = CvInvoke.Imread("Images/1.png", ImreadModes.Grayscale);
 
         public Form1()
         {
@@ -140,19 +142,17 @@ namespace MotionDetection
 
             //Display the image of the motion
 
-
-            motionImageBox.Image = image;
-            Mat surfImage;
+            
             long matchTime;
-            Mat grayImage;
-            cvtColor(image, grayImage, Emgu.)
-            using (Mat modelImage = CvInvoke.Imread("box.png", ImreadModes.Grayscale))
+           // Mat grayImage= new Mat();
+            //CvInvoke.CvtColor(image, grayImage, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+            //using (Mat modelImage = CvInvoke.Imread("Images/box.png", ImreadModes.Grayscale))
             
 
-            {
-                surfImage = DrawMatches.Draw(modelImage, image., out matchTime);
+            
+            Mat surfImage = DrawMatches.Draw(modelImage2, image, out matchTime);
                 
-            }
+            
             motionImageBox.Image = surfImage;
 
         }
