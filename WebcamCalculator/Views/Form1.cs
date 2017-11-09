@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -18,6 +19,7 @@ using Emgu.CV.Util;
 using Emgu.CV.VideoSurveillance;
 using Emgu.Util;
 using FeatureMatchingExample;
+using WebcamCalculator;
 using WebcamCalculator.Model;
 
 namespace MotionDetection
@@ -25,10 +27,11 @@ namespace MotionDetection
     public partial class Form1 : Form
     {
         private VideoCapture _capture;
-        private MotionHistory _motionHistory;
-        private BackgroundSubtractor _forgroundDetector;
         private TemplateContainer templateContainer = new TemplateContainer();
-        private Mat modelImage = CvInvoke.Imread("Images/1.png", ImreadModes.Grayscale);
+        private Mat modelImage1 = CvInvoke.Imread("Images/5.png", ImreadModes.Grayscale);
+        private Mat modelImage2 = CvInvoke.Imread("Images/5.png", ImreadModes.Grayscale);
+        private surfProcessingThread oSurfProcessingThread;
+        private Thread oThread;
 
         public Form1()
         {
@@ -49,109 +52,67 @@ namespace MotionDetection
 
             if (_capture != null) //if camera capture has been successfully created
             {
-                _motionHistory = new MotionHistory(
-                    1.0, //in second, the duration of motion history you wants to keep
-                    0.05, //in second, maxDelta for cvCalcMotionGradient
-                    0.5); //in second, minDelta for cvCalcMotionGradient
-
+                
                 _capture.ImageGrabbed += ProcessFrame;
                 _capture.Start();
             }
         }
-
-        private Mat _segMask = new Mat();
-        private Mat _forgroundMask = new Mat();
+        
         private void ProcessFrame(object sender, EventArgs e)
         {
             Mat image = new Mat();
 
             _capture.Retrieve(image);
-            if (_forgroundDetector == null)
-            {
-                _forgroundDetector = new BackgroundSubtractorMOG2();
-            }
-
-            _forgroundDetector.Apply(image, _forgroundMask);
-
-            //update the motion history
-            _motionHistory.Update(_forgroundMask);
-
-            #region get a copy of the motion mask and enhance its color
-            double[] minValues, maxValues;
-            Point[] minLoc, maxLoc;
-            _motionHistory.Mask.MinMax(out minValues, out maxValues, out minLoc, out maxLoc);
-            Mat motionMask = new Mat();
-            using (ScalarArray sa = new ScalarArray(255.0 / maxValues[0]))
-                CvInvoke.Multiply(_motionHistory.Mask, sa, motionMask, 1, DepthType.Cv8U);
-            //Image<Gray, Byte> motionMask = _motionHistory.Mask.Mul(255.0 / maxValues[0]);
-            #endregion
-
-            //create the motion image 
-           // Mat motionImage = new Mat(motionMask.Size.Height, motionMask.Size.Width, DepthType.Cv8U, 3);
-            //motionImage.SetTo(new MCvScalar(0));
-            //display the motion pixels in blue (first channel)
-            //motionImage[0] = motionMask;
-            //CvInvoke.InsertChannel(motionMask, motionImage, 0); www
-
-            //Threshold to define a motion area, reduce the value to detect smaller motion
-            double minArea = 100;
-
-            //storage.Clear(); //clear the storage
-            Rectangle[] rects;
-            using (VectorOfRect boundingRect = new VectorOfRect())
-            {
-                _motionHistory.GetMotionComponents(_segMask, boundingRect);
-                rects = boundingRect.ToArray();
-            }
-
-            //iterate through each of the motion component
-            foreach (Rectangle comp in rects)
-            {
-                int area = comp.Width * comp.Height;
-                //reject the components that have small area;
-                if (area < minArea) continue;
-
-                // find the angle and motion pixel count of the specific area
-                double angle, motionPixelCount;
-                _motionHistory.MotionInfo(_forgroundMask, comp, out angle, out motionPixelCount);
-
-                //reject the area that contains too few motion
-                if (motionPixelCount < area * 0.05) continue;
-
-                //Draw each individual motion in red
-                //DrawMotion(motionImage, comp, angle, new Bgr(Color.Red));www
-            }
+            
+            
 
             // find and draw the overall motion angle
             double overallAngle, overallMotionPixelCount;
-
-            _motionHistory.MotionInfo(_forgroundMask, new Rectangle(Point.Empty, motionMask.Size), out overallAngle, out overallMotionPixelCount);
-            //DrawMotion(motionImage, new Rectangle(Point.Empty, motionMask.Size), overallAngle, new Bgr(Color.Green));
-
+            
             if (this.Disposing || this.IsDisposed)
                 return;
 
             capturedImageBox.Image = image;
             forgroundImageBox.Image = image;
 
-            BriskController.GetText(templateContainer, image);
+            //BriskController.GetText(templateContainer, image);
 
-            //Display the amount of motions found on the current image
-            UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", rects.Length, overallMotionPixelCount));
+            long matchTime;
+            Mat grayImage = new Mat();
+            CvInvoke.CvtColor(image, grayImage, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray );
 
-            //Display the image of the motion
+            if (oSurfProcessingThread == null)
+            {
+                oSurfProcessingThread = new surfProcessingThread();
+            }
+            if (oThread == null)
+            {
+                oThread = new Thread(new ParameterizedThreadStart(oSurfProcessingThread.processing));
+                oThread.IsBackground = true;
+                oThread.Start(image);
+            }
+            if (!oThread.IsAlive)
+            {
+                Console.WriteLine("nowy watek");
+                oThread.Abort();
+                System.GC.Collect();
+                oThread = new Thread(new ParameterizedThreadStart(oSurfProcessingThread.processing));
+                oThread.IsBackground = true;
+                oThread.Start(image);
+            }
+            //if (oThread.ThreadState = ThreadState.Running && oThread.ThreadState != ThreadState.Stopped)
+            //{
+            //    Console.WriteLine("nowy watek");
+            //    oThread.Start(image);
+            //}
+
+
+
+
+
 
 
             motionImageBox.Image = image;
-            long matchTime;
-            //cvtColor(image, grayImage, Emgu.)
-            
-
-            
-            Mat surfImage = DrawMatches.Draw(modelImage, image, out matchTime);
-            Console.WriteLine(matchTime);
-            
-            motionImageBox.Image = surfImage;
 
         }
 
@@ -213,5 +174,7 @@ namespace MotionDetection
 
        
 
-    }   
+    }
+
+   
 }

@@ -8,6 +8,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1400">
     <Grid>
-        <preview:WebcamView/>
+        <preview:WebcamView></preview:WebcamView>
     </Grid>
 </Window>

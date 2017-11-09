@@ -19,11 +19,11 @@ namespace FeatureMatchingExample
         public static void FindMatch(Mat modelImage, Mat observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, VectorOfVectorOfDMatch matches, out Mat mask, out Mat homography)
         {
             int k = 2;
-            double uniquenessThreshold = 0.80;
-
+            double uniquenessThreshold = 0.8;
+            FastDetector fastCPU = new FastDetector(10, true);
             Stopwatch watch;
             homography = null;
-
+            BriefDescriptorExtractor descriptor = new BriefDescriptorExtractor();
             modelKeyPoints = new VectorOfKeyPoint();
             observedKeyPoints = new VectorOfKeyPoint();
 
@@ -59,8 +59,8 @@ namespace FeatureMatchingExample
                     if (nonZeroCount >= 4)
                     {
                         nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints,
-                            matches, mask, 1.5, 20);
-                        if (nonZeroCount >= 4)
+                            matches, mask, 1.9, 29);
+                        if (nonZeroCount >= 6)
                             homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeyPoints,
                                 observedKeyPoints, matches, mask, 2);
                     }
@@ -89,7 +89,7 @@ namespace FeatureMatchingExample
                 FindMatch(modelImage, observedImage, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
                    out mask, out homography);
 
-                //Draw the matched keypoints
+                //Draw the matched keypoint
                 Mat result = new Mat();
                 Features2DToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
                    matches, result, new MCvScalar(255, 255, 255), new MCvScalar(255, 255, 255), mask);
@@ -119,6 +119,62 @@ namespace FeatureMatchingExample
                         CvInvoke.Polylines(result, vp, true, new MCvScalar(255, 0, 0, 255), 5);
                     }
                 }
+                #endregion
+
+                return result;
+
+            }
+        }
+
+        public static bool MatchResult(Mat modelImage, Mat observedImage, out long matchTime)
+        {
+            Mat homography;
+            VectorOfKeyPoint modelKeyPoints;
+            VectorOfKeyPoint observedKeyPoints;
+            using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
+            {
+                Mat mask;
+                FindMatch(modelImage, observedImage, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
+                   out mask, out homography);
+
+                //Draw the matched keypoints
+                //Mat result = new Mat();
+                //Features2DToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
+                //   matches, result, new MCvScalar(255, 255, 255), new MCvScalar(255, 255, 255), mask);
+                bool result;
+                if (homography != null)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+                #region draw the projected region on the image
+
+                //if (homography != null)
+                //{
+                //    //draw a rectangle along the projected model
+                //    Rectangle rect = new Rectangle(Point.Empty, modelImage.Size);
+                //    PointF[] pts = new PointF[]
+                //    {
+                //  new PointF(rect.Left, rect.Bottom),
+                //  new PointF(rect.Right, rect.Bottom),
+                //  new PointF(rect.Right, rect.Top),
+                //  new PointF(rect.Left, rect.Top)
+                //    };
+                //    pts = CvInvoke.PerspectiveTransform(pts, homography);
+
+#if NETFX_CORE
+               Point[] points = Extensions.ConvertAll<PointF, Point>(pts, Point.Round);
+#else
+                    //Point[] points = Array.ConvertAll<PointF, Point>(pts, Point.Round);
+#endif
+                //    using (VectorOfPoint vp = new VectorOfPoint(points))
+                //    {
+                //        CvInvoke.Polylines(result, vp, true, new MCvScalar(255, 0, 0, 255), 5);
+                //    }
+                //}
                 #endregion
 
                 return result;
