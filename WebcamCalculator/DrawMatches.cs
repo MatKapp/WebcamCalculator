@@ -11,6 +11,7 @@ using Emgu.CV.Features2D;
 using Emgu.CV.Flann;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.CV.XFeatures2D;
 
 namespace FeatureMatchingExample
 {
@@ -31,6 +32,7 @@ namespace FeatureMatchingExample
             using (UMat uObservedImage = observedImage.GetUMat(AccessType.Read))
             {
                 KAZE featureDetector = new KAZE();
+                FastDetector fastDetector = new FastDetector();
 
                 //extract features from the object image
                 Mat modelDescriptors = new Mat();

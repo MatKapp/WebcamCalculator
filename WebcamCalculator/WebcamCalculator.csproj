@@ -135,6 +135,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="fastDetector.cs" />
     <Compile Include="Model\BriskController.cs" />
     <Compile Include="Model\DigitsContainer.cs" />
     <Compile Include="DrawMatches.cs" />

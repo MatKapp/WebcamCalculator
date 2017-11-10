@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Features2D;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 using Emgu.CV.UI;
@@ -43,6 +44,7 @@ namespace MotionDetection
                 try
                 {
                     _capture = new VideoCapture();
+
                 }
                 catch (NullReferenceException excpt)
                 {   //show errors if there is any
@@ -52,34 +54,35 @@ namespace MotionDetection
 
             if (_capture != null) //if camera capture has been successfully created
             {
-                
                 _capture.ImageGrabbed += ProcessFrame;
                 _capture.Start();
+
             }
         }
-        
+
         private void ProcessFrame(object sender, EventArgs e)
         {
             Mat image = new Mat();
 
             _capture.Retrieve(image);
-            
-            
+
+
 
             // find and draw the overall motion angle
             double overallAngle, overallMotionPixelCount;
-            
+
             if (this.Disposing || this.IsDisposed)
                 return;
 
             capturedImageBox.Image = image;
             forgroundImageBox.Image = image;
 
-            //BriskController.GetText(templateContainer, image);
+            BriskController.GetText(templateContainer, image);
+            //fastDetector.GetText(templateContainer, image);
 
             long matchTime;
             Mat grayImage = new Mat();
-            CvInvoke.CvtColor(image, grayImage, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray );
+            CvInvoke.CvtColor(image, grayImage, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
 
             if (oSurfProcessingThread == null)
             {
@@ -100,17 +103,6 @@ namespace MotionDetection
                 oThread.IsBackground = true;
                 oThread.Start(image);
             }
-            //if (oThread.ThreadState = ThreadState.Running && oThread.ThreadState != ThreadState.Stopped)
-            //{
-            //    Console.WriteLine("nowy watek");
-            //    oThread.Start(image);
-            //}
-
-
-
-
-
-
 
             motionImageBox.Image = image;
 
@@ -172,9 +164,9 @@ namespace MotionDetection
             _capture.Stop();
         }
 
-       
+
 
     }
 
-   
+
 }
