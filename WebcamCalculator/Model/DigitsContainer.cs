@@ -34,15 +34,15 @@ namespace WebcamCalculator.Model
         {
             this.digits = new List<ImageData>();
             digits.Add(new ImageData("Images/0.png", "0"));
-            //digits.Add(new ImageData("Images/1.png", "1"));
+            digits.Add(new ImageData("Images/1.png", "1"));
             digits.Add(new ImageData("Images/2.png", "2"));
             digits.Add(new ImageData("Images/3.png", "3"));
-            //digits.Add(new ImageData("Images/4.png", "4"));
+            digits.Add(new ImageData("Images/4.png", "4"));
             digits.Add(new ImageData("Images/5.png", "5"));
             digits.Add(new ImageData("Images/6.png", "6"));
-            //digits.Add(new ImageData("Images/7.png", "7"));
-            //digits.Add(new ImageData("Images/8.png", "8"));
-            //digits.Add(new ImageData("Images/9.png", "9"));
+            digits.Add(new ImageData("Images/7.png", "7"));
+            digits.Add(new ImageData("Images/8.png", "8"));
+            digits.Add(new ImageData("Images/9.png", "9"));
         }
     }
 }

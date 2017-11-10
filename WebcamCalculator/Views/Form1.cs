@@ -77,8 +77,8 @@ namespace MotionDetection
             capturedImageBox.Image = image;
             forgroundImageBox.Image = image;
 
-            BriskController.GetText(templateContainer, image);
-            //fastDetector.GetText(templateContainer, image);
+            string orbResult = BriskController.GetText(templateContainer, image);
+            UpdateTextL5($"Orb result: {orbResult}");
 
             long matchTime;
             Mat grayImage = new Mat();
@@ -122,6 +122,17 @@ namespace MotionDetection
             }
         }
 
+        private void UpdateTextL5(String text)
+        {
+            if (!IsDisposed && !Disposing && InvokeRequired)
+            {
+                Invoke((Action<String>)UpdateTextL5, text);
+            }
+            else
+            {
+                label5.Text = text;
+            }
+        }
 
         private static void DrawMotion(IInputOutputArray image, Rectangle motionRegion, double angle, Bgr color)
         {

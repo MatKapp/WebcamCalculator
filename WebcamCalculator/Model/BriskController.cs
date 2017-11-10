@@ -32,17 +32,32 @@ namespace WebcamCalculator.Model
 
             //Copied
             Mat mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
-            Mat homography = new Mat();
             mask.SetTo(new MCvScalar(255));
-            Features2DToolbox.VoteForUniqueness(matches, 0.6, mask);
-            int nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(templateKeyPoints, observedKeyPoints, matches, mask, 1.5, 20);
+            Features2DToolbox.VoteForUniqueness(matches, 0.8, mask);
 
-            return nonZeroCount > 10;
+            if (matches.Size == 0)
+            {
+                return false;
+            }
+            else
+            {
+                int nonZeroCount = CvInvoke.CountNonZero(mask);
+                double nonZeroCountNormalized = 1.0 * nonZeroCount / matches.Size;
+                if (nonZeroCountNormalized > 0.05)
+                {
+                    nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(templateKeyPoints, observedKeyPoints, matches, mask, 1.5, 20);
+                    nonZeroCountNormalized = 1.0 * nonZeroCount / matches.Size;
+                    return nonZeroCountNormalized > 0.1;
+                }
+                return false;
+            }
         }
 
         public static string GetText(TemplateContainer templateContainer, Mat image)
         {
-            Image<Bgr, byte> observedImage = templateContainer.digits[0].image;
+            //Image<Bgr, byte> observedImage = new Image<Bgr, byte>("Images/67.png");
+            Image<Bgr, byte> observedImage = image.ToImage<Bgr, byte>();
+            //Image < Bgr, byte> observedImage = templateContainer.digits[8].image;
 
             string result = "";
             foreach(var template in templateContainer.digits)
