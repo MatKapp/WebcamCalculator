@@ -133,7 +133,8 @@ namespace MotionDetection
             capturedImageBox.Image = image;
             forgroundImageBox.Image = image;
 
-            BriskController.GetText(templateContainer, image);
+            string orbResult = BriskController.GetText(templateContainer, image);
+            UpdateTextL5($"Orb result: {orbResult}");
 
             //Display the amount of motions found on the current image
             UpdateText(String.Format("Total Motions found: {0}; Motion Pixel count: {1}", rects.Length, overallMotionPixelCount));
@@ -145,15 +146,14 @@ namespace MotionDetection
             Mat surfImage;
             long matchTime;
             Mat grayImage;
-            cvtColor(image, grayImage, Emgu.)
-            using (Mat modelImage = CvInvoke.Imread("box.png", ImreadModes.Grayscale))
+            //using (Mat modelImage = CvInvoke.Imread("box.png", ImreadModes.Grayscale))
             
 
-            {
-                surfImage = DrawMatches.Draw(modelImage, image., out matchTime);
+            //{
+            //    surfImage = DrawMatches.Draw(modelImage, image, out matchTime);
                 
-            }
-            motionImageBox.Image = surfImage;
+            //}
+            //motionImageBox.Image = surfImage;
 
         }
 
@@ -171,6 +171,17 @@ namespace MotionDetection
             }
         }
 
+        private void UpdateTextL5(String text)
+        {
+            if (!IsDisposed && !Disposing && InvokeRequired)
+            {
+                Invoke((Action<String>)UpdateTextL5, text);
+            }
+            else
+            {
+                label5.Text = text;
+            }
+        }
 
         private static void DrawMotion(IInputOutputArray image, Rectangle motionRegion, double angle, Bgr color)
         {
