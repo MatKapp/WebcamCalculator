@@ -100,7 +100,6 @@ namespace WebcamCalculator.Views
           
          
 
-            BriskController.GetText(templateContainer, image);
             
             long matchTime;
             Mat grayImage = new Mat();
