@@ -135,12 +135,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="fastDetector.cs" />
+    <Compile Include="Model\fastDetector.cs" />
     <Compile Include="Model\BriskController.cs" />
     <Compile Include="Model\DigitsContainer.cs" />
-    <Compile Include="DrawMatches.cs" />
+    <Compile Include="Model\DrawMatches.cs" />
     <Compile Include="Model\PreviewModel.cs" />
-    <Compile Include="surfProcessingThread.cs" />
+    <Compile Include="Model\surfController.cs" />
+    <Compile Include="Model\surfProcessingThread.cs" />
     <Compile Include="Views\Form1.cs">
       <SubType>Form</SubType>
     </Compile>

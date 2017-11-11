@@ -31,7 +31,6 @@ namespace MotionDetection
         private TemplateContainer templateContainer = new TemplateContainer();
         private Mat modelImage1 = CvInvoke.Imread("Images/5.png", ImreadModes.Grayscale);
         private Mat modelImage2 = CvInvoke.Imread("Images/5.png", ImreadModes.Grayscale);
-        private surfProcessingThread oSurfProcessingThread;
         private Thread oThread;
 
         public Form1()
@@ -83,26 +82,8 @@ namespace MotionDetection
             long matchTime;
             Mat grayImage = new Mat();
             CvInvoke.CvtColor(image, grayImage, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
-
-            if (oSurfProcessingThread == null)
-            {
-                oSurfProcessingThread = new surfProcessingThread();
-            }
-            if (oThread == null)
-            {
-                oThread = new Thread(new ParameterizedThreadStart(oSurfProcessingThread.processing));
-                oThread.IsBackground = true;
-                oThread.Start(image);
-            }
-            if (!oThread.IsAlive)
-            {
-                Console.WriteLine("nowy watek");
-                oThread.Abort();
-                System.GC.Collect();
-                oThread = new Thread(new ParameterizedThreadStart(oSurfProcessingThread.processing));
-                oThread.IsBackground = true;
-                oThread.Start(image);
-            }
+            surfController.StartProcessing(image);
+            //image =DrawMatches.Draw(modelImage1, image, out matchTime);
 
             motionImageBox.Image = image;
 
