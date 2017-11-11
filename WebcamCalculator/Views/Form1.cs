@@ -29,8 +29,7 @@ namespace MotionDetection
     {
         private VideoCapture _capture;
         private TemplateContainer templateContainer = new TemplateContainer();
-        private Mat modelImage1 = CvInvoke.Imread("Images/5.png", ImreadModes.Grayscale);
-        private Mat modelImage2 = CvInvoke.Imread("Images/5.png", ImreadModes.Grayscale);
+        private OrbController orbController = new OrbController();
         private surfProcessingThread oSurfProcessingThread;
         private Thread oThread;
 
@@ -77,12 +76,13 @@ namespace MotionDetection
             capturedImageBox.Image = image;
             forgroundImageBox.Image = image;
 
-            string orbResult = BriskController.GetText(templateContainer, image);
-            UpdateTextL5($"Orb result: {orbResult}");
-
             long matchTime;
             Mat grayImage = new Mat();
             CvInvoke.CvtColor(image, grayImage, Emgu.CV.CvEnum.ColorConversion.Bgr2Gray);
+
+            string orbResult = orbController.GetText(templateContainer, image);
+            UpdateTextL5($"Orb result: {orbResult}");
+
 
             if (oSurfProcessingThread == null)
             {

@@ -136,7 +136,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="fastDetector.cs" />
-    <Compile Include="Model\BriskController.cs" />
+    <Compile Include="Model\OrbController.cs" />
     <Compile Include="Model\DigitsContainer.cs" />
     <Compile Include="DrawMatches.cs" />
     <Compile Include="Model\PreviewModel.cs" />

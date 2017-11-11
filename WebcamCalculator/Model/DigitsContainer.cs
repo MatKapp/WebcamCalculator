@@ -29,10 +29,11 @@ namespace WebcamCalculator.Model
         }
 
         public List<ImageData> digits;
+        public List<ImageData> signs;
 
         public TemplateContainer()
         {
-            this.digits = new List<ImageData>();
+            digits = new List<ImageData>();
             digits.Add(new ImageData("Images/0.png", "0"));
             digits.Add(new ImageData("Images/1.png", "1"));
             digits.Add(new ImageData("Images/2.png", "2"));
@@ -43,6 +44,13 @@ namespace WebcamCalculator.Model
             digits.Add(new ImageData("Images/7.png", "7"));
             digits.Add(new ImageData("Images/8.png", "8"));
             digits.Add(new ImageData("Images/9.png", "9"));
+
+            signs = new List<ImageData>();
+            signs.Add(new ImageData("Images/-.png", "-"));
+            signs.Add(new ImageData("Images/+.png", "+"));
+            signs.Add(new ImageData("Images/star.png", "*"));
+            signs.Add(new ImageData("Images/slash.png", "/"));
+
         }
     }
 }
