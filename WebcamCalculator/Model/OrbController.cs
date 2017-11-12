@@ -17,21 +17,18 @@ namespace WebcamCalculator.Model
     public class OrbController
     {
         private Emgu.CV.Features2D.ORBDetector orbDetector = new Emgu.CV.Features2D.ORBDetector();
-        private VectorOfKeyPoint templateKeyPoints = new VectorOfKeyPoint();
         private VectorOfKeyPoint observedKeyPoints = new VectorOfKeyPoint();
-        private Mat templateDescriptor = new Mat();
         private Mat observedDescriptor = new Mat();
         private enum Side { Left, Right, Both };
         private DataTable calculator = new DataTable();
 
-        private double DetectTemplate(Mat observedImage, Mat templateImage)
+        private double DetectTemplate(Mat observedImage, TemplateContainer.ImageData template)
         {
-            orbDetector.DetectAndCompute(templateImage, null, templateKeyPoints, templateDescriptor, false);
             orbDetector.DetectAndCompute(observedImage, null, observedKeyPoints, observedDescriptor, false);
-            if (templateKeyPoints.Size > 0 && observedKeyPoints.Size > 0)
+            if (template.keyPointsOrb.Size > 0 && observedKeyPoints.Size > 0)
             {
                 BFMatcher matcher = new BFMatcher(DistanceType.L2);
-                matcher.Add(templateDescriptor);
+                matcher.Add(template.descriptorOrb);
 
                 VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch();
                 matcher.KnnMatch(observedDescriptor, matches, 2, null);
@@ -48,11 +45,11 @@ namespace WebcamCalculator.Model
                 else
                 {
                     int nonZeroCount = CvInvoke.CountNonZero(mask);
-                    double nonZeroCountNormalized = 1.0 * nonZeroCount / templateKeyPoints.Size;
+                    double nonZeroCountNormalized = 1.0 * nonZeroCount / template.keyPointsOrb.Size;
                     if (nonZeroCount > 3)
                     {
-                        nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(templateKeyPoints, observedKeyPoints, matches, mask, 1.8, 18);
-                        nonZeroCountNormalized = 1.0 * nonZeroCount / templateKeyPoints.Size;
+                        nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(template.keyPointsOrb, observedKeyPoints, matches, mask, 1.8, 18);
+                        nonZeroCountNormalized = 1.0 * nonZeroCount / template.keyPointsOrb.Size;
                         return nonZeroCount;
                     }
                     return 0.0;
@@ -77,7 +74,7 @@ namespace WebcamCalculator.Model
             double best_result = 0.0;
             foreach (var template in templates)
             {
-                double obtainedValue = DetectTemplate(observedImage.Mat, template.image.Mat);
+                double obtainedValue = DetectTemplate(observedImage.Mat, template);
                 if (obtainedValue > best_result)
                 {
                     best_result = obtainedValue;
