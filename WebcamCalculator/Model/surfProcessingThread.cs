@@ -26,9 +26,9 @@ namespace WebcamCalculator
 
 
             long matchTime;
-            Tuple<Mat, int> tuple = (Tuple<Mat, int>) data;
-            bool matchResult = DrawMatches.MatchResult(modelImage1, tuple.Item1, out matchTime);
-            Console.WriteLine(matchResult);
+            //Tuple<Mat, int> tuple = (Tuple<Mat, int>) data;
+            //bool matchResult = DrawMatches.MatchResult(modelImage1, tuple.Item1, out matchTime);
+            //Console.WriteLine(matchResult);
             
             
         }

@@ -178,10 +178,5 @@ namespace MotionDetection
         {
             _capture.Stop();
         }
-
-
-
     }
-
-
 }
