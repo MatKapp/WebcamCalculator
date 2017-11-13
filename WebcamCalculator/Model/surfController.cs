@@ -29,7 +29,8 @@ namespace WebcamCalculator.Model
             foreach (var template in templateContainer)
             {
                 temp = 0;
-                temp = DrawMatches.MatchResult(template.image.Mat, image, out matchTime);
+                temp = DrawMatches.MatchResult2(image, template, out matchTime);
+                //temp = DrawMatches.MatchResult(template.image.Mat, image, out matchTime);
                 if (temp != 0)
                 {
                     while (result.Keys.Contains(-temp))

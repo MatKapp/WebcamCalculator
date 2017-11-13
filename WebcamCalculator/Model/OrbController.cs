@@ -25,6 +25,7 @@ namespace WebcamCalculator.Model
         private double DetectTemplate(Mat observedImage, TemplateContainer.ImageData template)
         {
             orbDetector.DetectAndCompute(observedImage, null, observedKeyPoints, observedDescriptor, false);
+
             if (template.keyPointsOrb.Size > 0 && observedKeyPoints.Size > 0)
             {
                 BFMatcher matcher = new BFMatcher(DistanceType.L2);
