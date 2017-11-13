@@ -6,8 +6,13 @@
         xmlns:local="clr-namespace:WebcamCalculator"
         xmlns:preview="clr-namespace:WebcamCalculator.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1400">
-    <Grid>
-        <preview:WebcamView></preview:WebcamView>
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        WindowState="Maximized"
+        WindowStyle="None"
+        Title="MainWindow">
+        
+    <Grid >
+        <preview:WebcamView HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ></preview:WebcamView>
     </Grid>
 </Window>

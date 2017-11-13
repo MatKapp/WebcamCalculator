@@ -26,54 +26,57 @@ namespace MotionDetection
             // 
             // motionImageBox
             // 
-            this.motionImageBox.Location = new System.Drawing.Point(12, 12);
+            this.motionImageBox.Location = new System.Drawing.Point(147, 12);
             this.motionImageBox.Name = "motionImageBox";
-            this.motionImageBox.Size = new System.Drawing.Size(475, 387);
+            this.motionImageBox.Size = new System.Drawing.Size(1011, 595);
+            this.motionImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.motionImageBox.TabIndex = 2;
             this.motionImageBox.TabStop = false;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(90, 411);
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(240, 641);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 13);
+            this.label5.Size = new System.Drawing.Size(97, 25);
             this.label5.TabIndex = 7;
-            this.label5.Text = "label5";
+            this.label5.Text = "Orb result";
             // 
             // FeatureComboBox
             // 
             this.FeatureComboBox.AccessibleName = "";
             this.FeatureComboBox.FormattingEnabled = true;
-            this.FeatureComboBox.Location = new System.Drawing.Point(39, 436);
+            this.FeatureComboBox.Location = new System.Drawing.Point(243, 691);
             this.FeatureComboBox.Name = "FeatureComboBox";
             this.FeatureComboBox.Size = new System.Drawing.Size(121, 21);
             this.FeatureComboBox.TabIndex = 8;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(370, 436);
+            this.button1.Location = new System.Drawing.Point(888, 691);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 9;
-            this.button1.Text = "button1";
+            this.button1.Text = "Start";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // surfResultLabel
             // 
             this.surfResultLabel.AutoSize = true;
-            this.surfResultLabel.Location = new System.Drawing.Point(328, 411);
+            this.surfResultLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.surfResultLabel.Location = new System.Drawing.Point(885, 641);
             this.surfResultLabel.Name = "surfResultLabel";
-            this.surfResultLabel.Size = new System.Drawing.Size(35, 13);
+            this.surfResultLabel.Size = new System.Drawing.Size(100, 25);
             this.surfResultLabel.TabIndex = 10;
-            this.surfResultLabel.Text = "label1";
+            this.surfResultLabel.Text = "Surf result";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(499, 482);
+            this.ClientSize = new System.Drawing.Size(1255, 744);
             this.Controls.Add(this.surfResultLabel);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.FeatureComboBox);

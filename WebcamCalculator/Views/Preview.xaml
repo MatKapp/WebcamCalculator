@@ -6,11 +6,12 @@
              xmlns:motionDetection="clr-namespace:MotionDetection" 
 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             
+             d:DesignHeight="800" d:DesignWidth="800">
     <Grid>
-        <WindowsFormsHost Name="webCam" >
+        <WindowsFormsHost  Name="webCam" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <WindowsFormsHost.Child>
-                <motionDetection:Form1 TopLevel="False"/>
+                <motionDetection:Form1 TopLevel="False" Dock="Fill"/>
 
 
             </WindowsFormsHost.Child>

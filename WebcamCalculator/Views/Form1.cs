@@ -176,8 +176,9 @@ namespace MotionDetection
                         Console.WriteLine(resultDigits.ElementAt(i));
                     }
                 }
-                if (resultSign.Count > 0 && resultDigits.Count >1)
+                if (resultSign.Count > 0 && resultDigits.Count > 1)
                 {
+
                     if (resultSign.ElementAt(0).Value == 1)
                     {
                         sign = "+";
@@ -188,13 +189,19 @@ namespace MotionDetection
                         sign = "*";
                         equationResult = (resultDigits.ElementAt(0).Value * resultDigits.ElementAt(1).Value);
                     }
-                    equation = resultDigits.ElementAt(0).Value.ToString() + sign +
+                    equation = "Surf result: " + resultDigits.ElementAt(0).Value.ToString() + sign +
                                resultDigits.ElementAt(1).Value.ToString() + "=" + equationResult.ToString();
+                }
+                else
+                {
+                    equation = "?";
                 }
 
                 surfResultLabel.Text = equation;
 
             }
         }
+
+       
     }
 }
